@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Photo Album</title>
+  <style>
+    body { margin: 0; background: #000; overflow: hidden; text-align: center; }
+    img#display { max-width: 100%; max-height: 100vh; }
+    .nav { position: absolute; top: 45%; width: 50px; height: 50px; background: rgba(255,255,255,0.5); z-index: 10; }
+    #prev { left: 10px; }
+    #next { right: 10px; }
+  </style>
+</head>
+<body>
+  <img id="display" src="{{ url_for('get_image', filename=images[0]) }}" alt="Photo">
+  <button class="nav" id="prev">&#9664;</button>
+  <button class="nav" id="next">&#9654;</button>
+
+  <script>
+    let images = {{ images|tojson }};
+    let idx = 0;
+    const imgElement = document.getElementById("display");
+    document.getElementById("next").onclick = function() { 
+      idx = (idx + 1) % images.length;
+      imgElement.src = "/images/" + images[idx];
+    };
+    document.getElementById("prev").onclick = function() {
+      idx = (idx - 1 + images.length) % images.length;
+      imgElement.src = "/images/" + images[idx];
+    };
+    setInterval(() => { document.getElementById("next").click(); }, 10000);
+    let touchStartX = null;
+    document.body.addEventListener("touchstart", e => { touchStartX = e.touches[0].clientX; });
+    document.body.addEventListener("touchend", e => {
+      if(touchStartX == null) return;
+      let diffX = e.changedTouches[0].clientX - touchStartX;
+      if(diffX < -50) { document.getElementById("next").click(); }
+      if(diffX > 50)  { document.getElementById("prev").click(); }
+      touchStartX = null;
+    });
+  </script>
+</body>
+</html>
