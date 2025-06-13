@@ -3,7 +3,7 @@ import os
 
 # CONFIG
 PHOTO_DIR = "/home/shao_stassen/photos"  # Folder where photos are stored
-ALLOWED_EXTS = {".jpg", ".jpeg", ".png", ".gif", ".heic"}
+ALLOWED_EXTS = {".jpg", ".jpeg", ".png", ".gif", ".heic", ".heif"}
 
 app = Flask(__name__)
 
